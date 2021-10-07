@@ -13,6 +13,7 @@ const App = () => {
 
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
+  const [mostVote, setMostVote] = useState({ idx: 0, vote: 0 });
 
   const nextAnecdote = () => {
     setSelected(Math.floor(Math.random() * (anecdotes.length - 1)));
@@ -22,6 +23,10 @@ const App = () => {
     const newVotes = [...votes];
     newVotes[selected] += 1;
     setVotes(newVotes);
+
+    if (mostVote.vote < votes[selected]) {
+      setMostVote({ vote: votes[selected], idx: selected });
+    }
   };
 
   return (
@@ -31,6 +36,10 @@ const App = () => {
       has {votes[selected]} votes <br />
       <button onClick={addVote}>vote</button>
       <button onClick={nextAnecdote}>next anecdote</button>
+      <h1>Anecdote with most votes</h1>
+      {anecdotes[mostVote.idx]}
+      <br />
+      has {votes[mostVote.idx]} votes
     </div>
   );
 };
