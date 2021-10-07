@@ -3,27 +3,32 @@ import React, { useState } from "react";
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
 
 const StatisticLine = ({ text, value }) => (
-  <div>
-    {text} {value}
-  </div>
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
 );
 const Statistic = ({ good, neutral, bad }) => {
   if (good || neutral || bad) {
     return (
       <div>
         <h1>statistics</h1>
-        <StatisticLine text="Good" value={good} />
-        <StatisticLine text="Neutral" value={neutral} />
-        <StatisticLine text="Bad" value={bad} />
-        <StatisticLine text="All" value={good + neutral + bad} />
-        <StatisticLine
-          text="Average"
-          value={(good * 1 + bad * -1) / (good + neutral + bad)}
-        />
-        <StatisticLine
-          text="Positif"
-          value={(good / (good + neutral + bad)) * 100}
-        />
+        <table>
+          <tbody>
+            <StatisticLine text="Good" value={good} />
+            <StatisticLine text="Neutral" value={neutral} />
+            <StatisticLine text="Bad" value={bad} />
+            <StatisticLine text="All" value={good + neutral + bad} />
+            <StatisticLine
+              text="Average"
+              value={(good * 1 + bad * -1) / (good + neutral + bad)}
+            />
+            <StatisticLine
+              text="Positif"
+              value={(good / (good + neutral + bad)) * 100}
+            />
+          </tbody>
+        </table>
       </div>
     );
   } else {
