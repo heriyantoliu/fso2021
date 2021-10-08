@@ -56,9 +56,9 @@ const App = () => {
         setNewName("");
         setNewNumber("");
         setMessage({ text: `Added ${newName}`, class: "success" });
-        setInterval(() => {
+        setTimeout(() => {
           setMessage({ text: null, class: "" });
-        }, 3000);
+        }, 5000);
       });
     }
   };
@@ -79,9 +79,21 @@ const App = () => {
     const deletePerson = persons.find((person) => person.id === id);
     const result = window.confirm(`Delete ${deletePerson.name} ?`);
     if (result) {
-      personService.remove(id).then((response) => {
-        setPersons(persons.filter((person) => person.id !== id));
-      });
+      personService
+        .remove(id)
+        .then((response) => {
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch((error) => {
+          setPersons(persons.filter((person) => person.id !== id));
+          setMessage({
+            text: `Information of ${deletePerson.name} has already been removed from server`,
+            class: "error",
+          });
+          setTimeout(() => {
+            setMessage({ text: null, class: "" });
+          }, 5000);
+        });
     }
   };
 
