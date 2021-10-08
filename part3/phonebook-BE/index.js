@@ -24,6 +24,8 @@ let persons = [
   },
 ];
 
+app.use(express.json());
+
 app.get("/info", (request, response) => {
   response.send(
     `Phonebook has info for ${
@@ -45,6 +47,17 @@ app.get("/api/persons/:id", (request, response) => {
   } else {
     response.status(404).end();
   }
+});
+
+app.post("/api/persons", (request, response) => {
+  const body = request.body;
+  const person = {
+    id: Math.floor(Math.random() * 9999999999),
+    name: body.name,
+    number: body.number,
+  };
+  persons = persons.concat(person);
+  response.json(person);
 });
 
 app.delete("/api/persons/:id", (request, response) => {
