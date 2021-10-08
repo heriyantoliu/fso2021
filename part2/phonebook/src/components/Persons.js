@@ -2,7 +2,7 @@ import React from "react";
 
 const Persons = ({ persons }) => {
   return persons.map((person) => (
-    <div>
+    <div key={person.id}>
       {person.name} {person.number}
     </div>
   ));
