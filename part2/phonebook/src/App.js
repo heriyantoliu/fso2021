@@ -5,11 +5,20 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 
+const Notification = ({ message }) => {
+  if (message.text === null) {
+    return null;
+  }
+
+  return <div className={message.class}>{message.text}</div>;
+};
+
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterName, setFilterName] = useState("");
+  const [message, setMessage] = useState({ text: null, class: "" });
 
   useEffect(() => {
     personService.getAll().then((response) => {
@@ -46,6 +55,10 @@ const App = () => {
         setPersons(persons.concat(response));
         setNewName("");
         setNewNumber("");
+        setMessage({ text: `Added ${newName}`, class: "success" });
+        setInterval(() => {
+          setMessage({ text: null, class: "" });
+        }, 3000);
       });
     }
   };
@@ -82,6 +95,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter value={filterName} onChange={handleFilterNameChange} />
 
       <h2>add a new </h2>
