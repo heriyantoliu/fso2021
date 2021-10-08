@@ -50,6 +50,16 @@ const App = () => {
     setFilterName(event.target.value);
   };
 
+  const handleDeletePerson = (id) => {
+    const deletePerson = persons.find((person) => person.id === id);
+    const result = window.confirm(`Delete ${deletePerson.name} ?`);
+    if (result) {
+      personService.remove(id).then((response) => {
+        setPersons(persons.filter((person) => person.id !== id));
+      });
+    }
+  };
+
   const filteredPersons = filterName
     ? persons.filter((person) => {
         let name = person.name.toLowerCase();
@@ -73,7 +83,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} onDelete={handleDeletePerson} />
     </div>
   );
 };
