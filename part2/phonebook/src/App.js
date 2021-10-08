@@ -20,22 +20,34 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
 
-    let found = persons.find((person) => person.name === newName);
-    if (found) {
-      alert(`${newName} is already added to phonebook`);
-      return;
+    let foundPerson = persons.find((person) => person.name === newName);
+    if (foundPerson) {
+      const result = window.confirm(
+        `${foundPerson.name} is already added to phonebook, replace the old number with the new one ?`
+      );
+      if (!result) {
+        return;
+      }
+      const updatedPerson = { ...foundPerson, number: newNumber };
+      personService.update(foundPerson.id, updatedPerson).then((response) => {
+        setPersons(
+          persons.map((person) =>
+            person.id !== foundPerson.id ? person : updatedPerson
+          )
+        );
+      });
+    } else {
+      const newPerson = {
+        name: newName,
+        number: newNumber,
+        id: persons.length + 1,
+      };
+      personService.create(newPerson).then((response) => {
+        setPersons(persons.concat(response));
+        setNewName("");
+        setNewNumber("");
+      });
     }
-
-    const newPerson = {
-      name: newName,
-      number: newNumber,
-      id: persons.length + 1,
-    };
-    personService.create(newPerson).then((response) => {
-      setPersons(persons.concat(response));
-      setNewName("");
-      setNewNumber("");
-    });
   };
 
   const handleNameChange = (event) => {
