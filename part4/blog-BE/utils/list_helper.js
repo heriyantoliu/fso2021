@@ -22,4 +22,40 @@ const favoriteBlog = (blogs) => {
   }
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog }
+const mostBlogs = (blogs) => {
+  let authorBlogs = []
+
+  blogs.forEach((blog) => {
+    const foundAuthor = authorBlogs.find(
+      (author) => author.author === blog.author
+    )
+    if (foundAuthor) {
+      const updatedAuthorBlogs = {
+        author: foundAuthor.author,
+        blogs: foundAuthor.blogs + 1,
+      }
+      authorBlogs = authorBlogs.map((author) =>
+        author.author === blog.author ? updatedAuthorBlogs : author
+      )
+    } else {
+      authorBlogs = authorBlogs.concat({
+        author: blog.author,
+        blogs: 1,
+      })
+    }
+  })
+
+  let mostBlogs = 0
+  authorBlogs.forEach((author) => {
+    if (author.blogs > mostBlogs) {
+      mostBlogs = author.blogs
+    }
+  })
+
+  console.log(authorBlogs)
+  console.log(mostBlogs)
+
+  return authorBlogs.find((author) => author.blogs === mostBlogs)
+}
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
