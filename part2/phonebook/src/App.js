@@ -51,15 +51,26 @@ const App = () => {
         number: newNumber,
         id: persons.length + 1,
       };
-      personService.create(newPerson).then((response) => {
-        setPersons(persons.concat(response));
-        setNewName("");
-        setNewNumber("");
-        setMessage({ text: `Added ${newName}`, class: "success" });
-        setTimeout(() => {
-          setMessage({ text: null, class: "" });
-        }, 5000);
-      });
+      personService
+        .create(newPerson)
+        .then((response) => {
+          setPersons(persons.concat(response));
+          setNewName("");
+          setNewNumber("");
+          setMessage({ text: `Added ${newName}`, class: "success" });
+          setTimeout(() => {
+            setMessage({ text: null, class: "" });
+          }, 5000);
+        })
+        .catch((error) => {
+          setMessage({
+            text: `Added ${error.response.data.error}`,
+            class: "error",
+          });
+          setTimeout(() => {
+            setMessage({ text: null, class: "" });
+          }, 5000);
+        });
     }
   };
 
