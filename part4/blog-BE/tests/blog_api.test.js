@@ -94,6 +94,35 @@ test('error for missing title and author property', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
+test('delete blog', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+
+  const blog = blogsAtStart.find(
+    (blog) => blog.title === helper.initialBlogs[1].title
+  )
+
+  await api.delete(`/api/blogs/${blog.id}`)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  const titles = blogsAtEnd.map((blog) => blog.title)
+  expect(titles).not.toContain(blog.title)
+})
+
+test('update blog', async () => {
+  const blogsAtEnd = await helper.blogsInDb()
+
+  const updatedBlog = blogsAtEnd.find(
+    (blog) => blog.title === helper.initialBlogs[0].title
+  )
+
+  updatedBlog.likes = 10
+
+  const response = await api
+    .put(`/api/blogs/${updatedBlog.id}`)
+    .send(updatedBlog)
+  expect(response.body.likes).toBe(updatedBlog.likes)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
