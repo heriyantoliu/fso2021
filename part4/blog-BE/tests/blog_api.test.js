@@ -60,7 +60,7 @@ test('a valid note can be added', async () => {
   expect(titles).toContain('Title C')
 })
 
-test('Default like property = 0', async () => {
+test('Default likes property = 0', async () => {
   const newBlog = {
     title: 'Title C',
     author: 'Author C',
@@ -79,6 +79,19 @@ test('Default like property = 0', async () => {
   const blog = blogsAtEnd.find((blog) => blog.title === newBlog.title)
 
   expect(blog.likes).toBe(0)
+})
+
+test('error for missing title and author property', async () => {
+  const newBlog = {
+    url: 'www.c.com',
+    likes: 1,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
 })
 
 afterAll(() => {
