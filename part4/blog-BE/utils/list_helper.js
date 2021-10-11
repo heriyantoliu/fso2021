@@ -52,10 +52,40 @@ const mostBlogs = (blogs) => {
     }
   })
 
-  console.log(authorBlogs)
-  console.log(mostBlogs)
-
   return authorBlogs.find((author) => author.blogs === mostBlogs)
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
+const mostLikes = (blogs) => {
+  let authorLikes = []
+
+  blogs.forEach((blog) => {
+    const foundAuthor = authorLikes.find(
+      (author) => author.author === blog.author
+    )
+    if (foundAuthor) {
+      const updatedAuthorLikes = {
+        author: foundAuthor.author,
+        likes: foundAuthor.likes + blog.likes,
+      }
+      authorLikes = authorLikes.map((author) =>
+        author.author === blog.author ? updatedAuthorLikes : author
+      )
+    } else {
+      authorLikes = authorLikes.concat({
+        author: blog.author,
+        likes: blog.likes,
+      })
+    }
+  })
+
+  let mostLikes = 0
+  authorLikes.forEach((author) => {
+    if (author.likes > mostLikes) {
+      mostLikes = author.likes
+    }
+  })
+
+  return authorLikes.find((author) => author.likes === mostLikes)
+}
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes }
