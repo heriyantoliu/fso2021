@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Blog from './components/Blog';
+import Notification from './components/Notification';
 import blogService from './services/blogs';
 import loginService from './services/login';
 
@@ -11,6 +12,7 @@ const App = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -28,13 +30,20 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
 
-    const user = await loginService.login({ username, password });
+    try {
+      const user = await loginService.login({ username, password });
 
-    window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
-    blogService.setToken(user.token);
-    setUser(user);
-    setUsername('');
-    setPassword('');
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
+      blogService.setToken(user.token);
+      setUser(user);
+      setUsername('');
+      setPassword('');
+    } catch (exception) {
+      setMessage({ text: 'wrong username or password', className: 'error' });
+      setTimeout(() => {
+        setMessage(null);
+      }, 2000);
+    }
   };
 
   const handleLogout = () => {
@@ -43,13 +52,28 @@ const App = () => {
     setUser(null);
   };
 
-  const handleNewBlog = (event) => {
+  const handleNewBlog = async (event) => {
     event.preventDefault();
-    blogService.create({
+    const result = await blogService.create({
       title,
       author,
       url,
     });
+
+    setMessage({
+      text: `a new blog ${result.title} by ${result.author} added`,
+      className: 'success',
+    });
+    setTimeout(() => {
+      setMessage(null);
+    }, 2000);
+
+    setTitle('');
+    setAuthor('');
+    setUrl('');
+
+    const blogs = await blogService.getAll();
+    setBlogs(blogs);
   };
 
   const loginForm = () => (
@@ -118,7 +142,12 @@ const App = () => {
     </div>
   );
 
-  return <div>{user === null ? loginForm() : blogsList()}</div>;
+  return (
+    <div>
+      <Notification message={message} />
+      {user === null ? loginForm() : blogsList()}
+    </div>
+  );
 };
 
 export default App;
