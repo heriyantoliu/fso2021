@@ -4,6 +4,7 @@
 @userID=6165121c03b1c1a9c7dff748
 
 //Login
+# @name token
 POST {{loginUrl}}
 Content-Type: application/json
 
@@ -37,5 +38,18 @@ Content-Type: application/json
   "title": "Microservices and the First Law of Distributed Object",
   "author": "Martin Fowler",
   "url": "https://martinfowler.com/articles/distributed-objects-microservices.html",
+  "user": "{{userID}}"
+}
+
+###
+//Create Blog 3
+POST {{blogUrl}}
+Authorization: Bearer {{token.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "test",
+  "author": "author",
+  "url": "https://abc.com",
   "user": "{{userID}}"
 }
