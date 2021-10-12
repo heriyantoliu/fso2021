@@ -2,6 +2,7 @@
 @blogUrl={{baseUrl}}/api/blogs
 @loginUrl={{baseUrl}}/api/login
 @userID=6165121c03b1c1a9c7dff748
+@blogID=6165266a2b017637a6956dd2
 
 //Login
 # @name token
@@ -10,6 +11,17 @@ Content-Type: application/json
 
 {
   "username":"mluukkai",
+  "password":"password123"
+}
+
+###
+//Login 2
+# @name token
+POST {{loginUrl}}
+Content-Type: application/json
+
+{
+  "username":"hellas",
   "password":"password123"
 }
 
@@ -53,3 +65,8 @@ Content-Type: application/json
   "url": "https://abc.com",
   "user": "{{userID}}"
 }
+
+###
+//Delete Blog
+DELETE {{blogUrl}}/{{blogID}}
+Authorization: Bearer {{token.response.body.token}}
