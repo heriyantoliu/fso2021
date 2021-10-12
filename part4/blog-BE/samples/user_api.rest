@@ -15,7 +15,7 @@ Content-Type: application/json
 ###
 //Get all users
 GET {{userUrl}}
-Authorization: Bearer {{token.response.body.token}}
+
 
 ###
 //Create user 1

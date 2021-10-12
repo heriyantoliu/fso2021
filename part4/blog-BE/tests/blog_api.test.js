@@ -1,14 +1,35 @@
+const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const helper = require('./test_helper')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const config = require('../utils/config')
 
 const api = supertest(app)
 
+let token = null
+
 beforeEach(async () => {
+  await User.deleteMany({})
+  const userObject = new User({
+    username: 'dummy',
+    name: 'Dummy',
+    passwordHash: '',
+  })
+  const userResult = await userObject.save()
+  const userForToken = {
+    username: userResult.username,
+    id: userResult._id,
+  }
+
+  token = jwt.sign(userForToken, config.SECRET)
+
   await Blog.deleteMany({})
-  const blogObjects = helper.initialBlogs.map((blog) => new Blog(blog))
+  const blogObjects = helper.initialBlogs.map(
+    (blog) => new Blog({ ...blog, user: userResult._id })
+  )
   const promiseArray = blogObjects.map((blog) => blog.save())
   await Promise.all(promiseArray)
 })
@@ -49,6 +70,7 @@ test('a valid note can be added', async () => {
   await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -70,6 +92,7 @@ test('Default likes property = 0', async () => {
   await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -90,6 +113,7 @@ test('error for missing title and author property', async () => {
   await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(400)
     .expect('Content-Type', /application\/json/)
 })
@@ -101,7 +125,9 @@ test('delete blog', async () => {
     (blog) => blog.title === helper.initialBlogs[1].title
   )
 
-  await api.delete(`/api/blogs/${blog.id}`)
+  await api
+    .delete(`/api/blogs/${blog.id}`)
+    .set('Authorization', `Bearer ${token}`)
 
   const blogsAtEnd = await helper.blogsInDb()
   const titles = blogsAtEnd.map((blog) => blog.title)

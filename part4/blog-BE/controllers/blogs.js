@@ -1,14 +1,14 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const middleware = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response) => {
-  console.log(request.user)
+blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   const user = request.user
   if (!request.user) {
     return
@@ -36,16 +36,22 @@ blogsRouter.put('/:id', async (request, response) => {
   response.json(updatedBlog)
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
-  const blog = await Blog.findById(request.params.id)
+blogsRouter.delete(
+  '/:id',
+  middleware.userExtractor,
+  async (request, response) => {
+    const blog = await Blog.findById(request.params.id)
+    console.log('DELETE')
+    console.log('ID', request.user.id)
 
-  if (blog.user.toString() !== request.user.id) {
-    return response
-      .status(401)
-      .json({ error: 'cannot delete another user blog' })
+    if (blog.user.toString() !== request.user.id) {
+      return response
+        .status(401)
+        .json({ error: 'cannot delete another user blog' })
+    }
+    await Blog.findByIdAndRemove(request.params.id)
+    response.status(204).end()
   }
-  await Blog.findByIdAndRemove(request.params.id)
-  response.status(204).end()
-})
+)
 
 module.exports = blogsRouter

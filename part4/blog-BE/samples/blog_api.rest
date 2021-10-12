@@ -28,7 +28,7 @@ Content-Type: application/json
 ###
 //Get All Blogs
 GET {{blogUrl}}
-Authorization: Bearer {{token.response.body.token}}
+
 
 ###
 //Create Blog 1
