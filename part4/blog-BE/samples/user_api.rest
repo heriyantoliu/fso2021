@@ -25,3 +25,14 @@ Content-Type: application/json
   "name": "Matti Luukkainen",
   "password": "password123"
 }
+
+###
+//Create user 3
+POST {{userUrl}}
+Content-Type: application/json
+
+{
+  "username": "mluukkai",
+  "name": "Matti Luukkainen",
+  "password": "pa"
+}
