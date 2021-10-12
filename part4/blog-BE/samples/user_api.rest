@@ -1,0 +1,27 @@
+@baseUrl=http://localhost:3001
+@userUrl={{baseUrl}}/api/users
+
+//Get all users
+GET {{userUrl}}
+
+###
+//Create user 1
+POST {{userUrl}}
+Content-Type: application/json
+
+{
+  "username": "hellas",
+  "name": "Arto Hellas",
+  "password": "password123"
+}
+
+###
+//Create user 2
+POST {{userUrl}}
+Content-Type: application/json
+
+{
+  "username": "mluukkai",
+  "name": "Matti Luukkainen",
+  "password": "password123"
+}
