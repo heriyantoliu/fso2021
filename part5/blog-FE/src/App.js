@@ -77,6 +77,11 @@ const App = () => {
     );
   };
 
+  const handleRemove = async (id) => {
+    await blogService.remove(id);
+    setBlogs(blogs.filter((blog) => blog.id !== id));
+  };
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -113,7 +118,12 @@ const App = () => {
       {blogs
         .sort((a, b) => a.likes - b.likes)
         .map((blog) => (
-          <Blog key={blog.id} blog={blog} addLikes={handleAddLikes} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            addLikes={handleAddLikes}
+            removeBlog={handleRemove}
+          />
         ))}
     </div>
   );

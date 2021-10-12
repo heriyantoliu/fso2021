@@ -1,7 +1,7 @@
 import React from 'react';
 import Togglable from './Togglable';
 
-const Blog = ({ blog, addLikes }) => {
+const Blog = ({ blog, addLikes, removeBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -21,6 +21,15 @@ const Blog = ({ blog, addLikes }) => {
     });
   };
 
+  const handleRemove = (blog) => {
+    const result = window.confirm(
+      `Remove blog ${blog.title} by ${blog.author}`
+    );
+    if (result) {
+      removeBlog(blog.id);
+    }
+  };
+
   return (
     <div style={blogStyle}>
       <span>
@@ -33,6 +42,7 @@ const Blog = ({ blog, addLikes }) => {
           <button onClick={() => handleAddLikes(blog)}>likes</button>
         </div>
         <div>{blog.author}</div>
+        <button onClick={() => handleRemove(blog)}>remove</button>
       </Togglable>
     </div>
   );
