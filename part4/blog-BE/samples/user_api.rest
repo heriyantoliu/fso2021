@@ -1,8 +1,21 @@
 @baseUrl=http://localhost:3001
 @userUrl={{baseUrl}}/api/users
+@loginUrl={{baseUrl}}/api/login
 
+//Login
+# @name token
+POST {{loginUrl}}
+Content-Type: application/json
+
+{
+  "username":"mluukkai",
+  "password":"password123"
+}
+
+###
 //Get all users
 GET {{userUrl}}
+Authorization: Bearer {{token.response.body.token}}
 
 ###
 //Create user 1

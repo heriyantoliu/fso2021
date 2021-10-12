@@ -2,7 +2,7 @@
 @blogUrl={{baseUrl}}/api/blogs
 @loginUrl={{baseUrl}}/api/login
 @userID=6165121c03b1c1a9c7dff748
-@blogID=6165266a2b017637a6956dd2
+@blogID=61652aef71015a6572e768bf
 
 //Login
 # @name token
@@ -28,6 +28,7 @@ Content-Type: application/json
 ###
 //Get All Blogs
 GET {{blogUrl}}
+Authorization: Bearer {{token.response.body.token}}
 
 ###
 //Create Blog 1
@@ -62,8 +63,7 @@ Content-Type: application/json
 {
   "title": "test 2",
   "author": "author",
-  "url": "https://abc.com",
-  "user": "{{userID}}"
+  "url": "https://abc.com"
 }
 
 ###
