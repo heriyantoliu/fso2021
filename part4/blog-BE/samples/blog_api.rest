@@ -1,7 +1,18 @@
 @baseUrl=http://localhost:3001
 @blogUrl={{baseUrl}}/api/blogs
+@loginUrl={{baseUrl}}/api/login
 @userID=6165121c03b1c1a9c7dff748
 
+//Login
+POST {{loginUrl}}
+Content-Type: application/json
+
+{
+  "username":"mluukkai",
+  "password":"password123"
+}
+
+###
 //Get All Blogs
 GET {{blogUrl}}
 
