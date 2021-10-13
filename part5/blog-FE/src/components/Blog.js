@@ -11,7 +11,7 @@ const Blog = ({ blog, addLikes, removeBlog }) => {
     marginBottom: 5,
   }
 
-  const handleAddLikes = (blog) => {
+  const handleAddLikes = () => {
     addLikes({
       id: blog.id,
       author: blog.author,
@@ -38,7 +38,9 @@ const Blog = ({ blog, addLikes, removeBlog }) => {
         <div>{blog.url}</div>
         <div>
           likes {blog.likes}{' '}
-          <button onClick={() => handleAddLikes(blog)}>likes</button>
+          <button id="likes" className="btnLike" onClick={handleAddLikes}>
+            likes
+          </button>
         </div>
         <div>{blog.author}</div>
         <button onClick={() => handleRemove(blog)}>remove</button>
@@ -49,7 +51,7 @@ const Blog = ({ blog, addLikes, removeBlog }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  // addLikes: PropTypes.func.isRequired,
+  addLikes: PropTypes.func.isRequired,
   // removeBlog: PropTypes.func.isRequired,
 }
 
