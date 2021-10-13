@@ -85,6 +85,7 @@ const App = () => {
       <div>
         username{' '}
         <input
+          id="username"
           type="text"
           value={username}
           name="username"
@@ -94,6 +95,7 @@ const App = () => {
       <div>
         password{' '}
         <input
+          id="password"
           type="password"
           value={password}
           name="password"
@@ -128,6 +130,7 @@ const App = () => {
 
   return (
     <div>
+      <h1>Blogs</h1>
       <Notification message={message} />
       {user === null ? loginForm() : blogsList()}
     </div>
