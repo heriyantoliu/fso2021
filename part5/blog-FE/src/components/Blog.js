@@ -36,7 +36,7 @@ const Blog = ({ blog, addLikes, removeBlog }) => {
       </span>
       <Togglable buttonLabel="view">
         <div>{blog.url}</div>
-        <div>
+        <div id="likes-div">
           likes {blog.likes}{' '}
           <button id="likes" className="btnLike" onClick={handleAddLikes}>
             likes

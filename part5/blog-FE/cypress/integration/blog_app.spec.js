@@ -51,5 +51,35 @@ describe('Blog app', () => {
       cy.get('#create-blog-button').click()
       cy.contains('E2E by Cypress')
     })
+
+    describe('and several blog exists', () => {
+      beforeEach(() => {
+        cy.createBlog({
+          title: 'first title',
+          author: 'first author',
+          url: 'www.first.com',
+          likes: 0,
+        })
+        cy.createBlog({
+          title: 'second title',
+          author: 'second author',
+          url: 'www.second.com',
+          likes: 5,
+        })
+        cy.createBlog({
+          title: 'third title',
+          author: 'third author',
+          url: 'www.third.com',
+          likes: 2,
+        })
+      })
+
+      it('it can like blog', () => {
+        cy.contains('second title second author').parent().as('theParent')
+        cy.get('@theParent').find('#view-button').click()
+        cy.get('@theParent').find('#likes').click()
+        cy.get('@theParent').should('contain', 'likes 6')
+      })
+    })
   })
 })
