@@ -43,7 +43,9 @@ const Blog = ({ blog, addLikes, removeBlog }) => {
           </button>
         </div>
         <div>{blog.author}</div>
-        <button onClick={() => handleRemove(blog)}>remove</button>
+        <button id="remove-blog-button" onClick={() => handleRemove(blog)}>
+          remove
+        </button>
       </Togglable>
     </div>
   )

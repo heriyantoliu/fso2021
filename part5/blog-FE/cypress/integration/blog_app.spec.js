@@ -80,6 +80,13 @@ describe('Blog app', () => {
         cy.get('@theParent').find('#likes').click()
         cy.get('@theParent').should('contain', 'likes 6')
       })
+
+      it('it can remove blog', () => {
+        cy.contains('second title second author').parent().as('theParent')
+        cy.get('@theParent').find('#view-button').click()
+        cy.get('@theParent').find('#remove-blog-button').click()
+        cy.get('html').should('not.contain', 'second title second author')
+      })
     })
   })
 })
