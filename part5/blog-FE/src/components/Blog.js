@@ -49,8 +49,8 @@ const Blog = ({ blog, addLikes, removeBlog }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  addLikes: PropTypes.func.isRequired,
-  removeBlog: PropTypes.func.isRequired,
+  // addLikes: PropTypes.func.isRequired,
+  // removeBlog: PropTypes.func.isRequired,
 }
 
 export default Blog
