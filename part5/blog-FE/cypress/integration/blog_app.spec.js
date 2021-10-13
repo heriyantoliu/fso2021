@@ -37,4 +37,19 @@ describe('Blog app', () => {
         .and('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+
+  describe('when logged in', () => {
+    beforeEach(() => {
+      cy.login({ username: 'mluukkai', password: 'salainen' })
+    })
+
+    it('a blog can be created', () => {
+      cy.contains('create new blog').click()
+      cy.get('#title').type('E2E by Cypress')
+      cy.get('#author').type('Cypress')
+      cy.get('#url').type('www.abc.com')
+      cy.get('#create-blog-button').click()
+      cy.contains('E2E by Cypress')
+    })
+  })
 })
