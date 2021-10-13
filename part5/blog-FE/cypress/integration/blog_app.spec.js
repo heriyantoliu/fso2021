@@ -1,13 +1,22 @@
 describe('Blog app', () => {
   beforeEach(() => {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
-    const user = {
+    let user = {
       name: 'Matti Luukkainen',
       username: 'mluukkai',
       password: 'salainen',
     }
 
     cy.request('POST', 'http://localhost:3001/api/users', user)
+
+    user = {
+      name: 'Arto Hellas',
+      username: 'hellas',
+      password: 'salainen',
+    }
+
+    cy.request('POST', 'http://localhost:3001/api/users', user)
+
     cy.visit('http://localhost:3000')
   })
 
@@ -72,6 +81,16 @@ describe('Blog app', () => {
           url: 'www.third.com',
           likes: 2,
         })
+
+        cy.login({ username: 'hellas', password: 'salainen' })
+        cy.createBlog({
+          title: 'forth title',
+          author: 'forth author',
+          url: 'www.forth.com',
+          likes: 10,
+        })
+
+        cy.login({ username: 'mluukkai', password: 'salainen' })
       })
 
       it('it can like blog', () => {
@@ -87,6 +106,21 @@ describe('Blog app', () => {
         cy.get('@theParent').find('#remove-blog-button').click()
         cy.get('html').should('not.contain', 'second title second author')
       })
+
+      it('it cannot remove blog another author', () => {
+        cy.contains('forth title forth author').parent().as('theParent')
+        cy.get('@theParent').find('#view-button').click()
+        cy.get('@theParent').find('#remove-blog-button').click()
+        cy.get('html').should('contain', 'cannot delete another user blog')
+      })
+
+      // it('sort by likes', () => {
+      //   cy.get('#list-blogs>#span-blog').should((items) => {
+      //     expect(items[0]).to.contain('first title first author')
+      //     expect(items[1]).to.contain('third title third author')
+      //     expect(items[2]).to.contain('second title second author')
+      //   })
+      // })
     })
   })
 })

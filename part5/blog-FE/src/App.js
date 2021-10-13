@@ -76,8 +76,15 @@ const App = () => {
   }
 
   const handleRemove = async (id) => {
-    await blogService.remove(id)
-    setBlogs(blogs.filter((blog) => blog.id !== id))
+    try {
+      await blogService.remove(id)
+      setBlogs(blogs.filter((blog) => blog.id !== id))
+    } catch (exception) {
+      setMessage({ text: exception.response.data.error, className: 'error' })
+      setTimeout(() => {
+        setMessage(null)
+      }, 2000)
+    }
   }
 
   const loginForm = () => (

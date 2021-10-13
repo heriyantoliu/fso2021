@@ -30,8 +30,8 @@ const Blog = ({ blog, addLikes, removeBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
-      <span>
+    <div id="list-blogs" style={blogStyle}>
+      <span id="span-blog">
         {blog.title} {blog.author}
       </span>
       <Togglable buttonLabel="view">
