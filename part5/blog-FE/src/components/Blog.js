@@ -1,6 +1,6 @@
-import React from 'react';
-import Togglable from './Togglable';
-import PropTypes from 'prop-types';
+import React from 'react'
+import Togglable from './Togglable'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, addLikes, removeBlog }) => {
   const blogStyle = {
@@ -9,7 +9,7 @@ const Blog = ({ blog, addLikes, removeBlog }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
-  };
+  }
 
   const handleAddLikes = (blog) => {
     addLikes({
@@ -19,17 +19,15 @@ const Blog = ({ blog, addLikes, removeBlog }) => {
       url: blog.url,
       likes: blog.likes + 1,
       user: blog.user.id,
-    });
-  };
+    })
+  }
 
   const handleRemove = (blog) => {
-    const result = window.confirm(
-      `Remove blog ${blog.title} by ${blog.author}`
-    );
+    const result = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
     if (result) {
-      removeBlog(blog.id);
+      removeBlog(blog.id)
     }
-  };
+  }
 
   return (
     <div style={blogStyle}>
@@ -46,13 +44,13 @@ const Blog = ({ blog, addLikes, removeBlog }) => {
         <button onClick={() => handleRemove(blog)}>remove</button>
       </Togglable>
     </div>
-  );
-};
+  )
+}
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   addLikes: PropTypes.func.isRequired,
   removeBlog: PropTypes.func.isRequired,
-};
+}
 
-export default Blog;
+export default Blog
