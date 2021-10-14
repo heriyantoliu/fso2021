@@ -7,7 +7,7 @@ const AnecdoteForm = (props) => {
   const addAnecdote = async (event) => {
     event.preventDefault();
     props.createAnecdote(event.target.anecdote.value);
-    props.setNotification(`Added ${event.target.anecdote.value}`, 3);
+    props.setNotification(`Added ${event.target.anecdote.value}`, 5);
 
     event.target.anecdote.value = '';
   };
