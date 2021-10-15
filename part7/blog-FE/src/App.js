@@ -8,9 +8,10 @@ import BlogsList from './components/BlogsList'
 import UsersList from './components/UsersList'
 import User from './components/User'
 import Blog from './components/Blog'
+import Menu from './components/Menu'
 
 import { getBlogs } from './reducers/blogReducer'
-import { setUser, userLogout } from './reducers/loginReducer'
+import { setUser } from './reducers/loginReducer'
 
 const App = () => {
   const login = useSelector((state) => state.login)
@@ -24,11 +25,6 @@ const App = () => {
   useEffect(() => {
     dispatch(setUser())
   }, [])
-
-  const handleLogout = () => {
-    console.log('LOGOUT')
-    dispatch(userLogout())
-  }
 
   const userMatch = useRouteMatch('/users/:id')
   let userID
@@ -46,31 +42,23 @@ const App = () => {
     <div>
       <h1>Blogs</h1>
       <Notification />
-      {login === null ? (
-        <LoginForm />
-      ) : (
-        <div>
-          <p>
-            {login.name} logged in
-            <br />
-            <button onClick={handleLogout}>logout</button>
-          </p>
-          <Switch>
-            <Route path="/users/:id">
-              <User id={userID} />
-            </Route>
-            <Route path="/users">
-              <UsersList />
-            </Route>
-            <Route path="/blogs/:id">
-              <Blog id={blogID} />
-            </Route>
-            <Route path="/">
-              {login === null ? <LoginForm /> : <BlogsList />}
-            </Route>
-          </Switch>
-        </div>
-      )}
+      <Menu />
+      {login !== null ? (
+        <Switch>
+          <Route path="/users/:id">
+            <User id={userID} />
+          </Route>
+          <Route path="/users">
+            <UsersList />
+          </Route>
+          <Route path="/blogs/:id">
+            <Blog id={blogID} />
+          </Route>
+          <Route path="/">
+            {login === null ? <LoginForm /> : <BlogsList />}
+          </Route>
+        </Switch>
+      ) : null}
     </div>
   )
 }
