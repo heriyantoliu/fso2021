@@ -27,8 +27,12 @@ Content-Type: application/json
 
 ###
 //Get All Blogs
+# @name blog
 GET {{blogUrl}}
 
+###
+//Get Specific Blog
+GET {{blogUrl}}/{{blog.response.body.$[0].id}}
 
 ###
 //Create Blog 1

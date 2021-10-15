@@ -7,6 +7,7 @@ import LoginForm from './components/LoginForm'
 import BlogsList from './components/BlogsList'
 import UsersList from './components/UsersList'
 import User from './components/User'
+import Blog from './components/Blog'
 
 import { getBlogs } from './reducers/blogReducer'
 import { setUser, userLogout } from './reducers/loginReducer'
@@ -29,10 +30,16 @@ const App = () => {
     dispatch(userLogout())
   }
 
-  const match = useRouteMatch('/users/:id')
+  const userMatch = useRouteMatch('/users/:id')
   let userID
-  if (match) {
-    userID = match.params.id
+  if (userMatch) {
+    userID = userMatch.params.id
+  }
+
+  const blogMatch = useRouteMatch('/blogs/:id')
+  let blogID
+  if (blogMatch) {
+    blogID = blogMatch.params.id
   }
 
   return (
@@ -55,7 +62,9 @@ const App = () => {
             <Route path="/users">
               <UsersList />
             </Route>
-
+            <Route path="/blogs/:id">
+              <Blog id={blogID} />
+            </Route>
             <Route path="/">
               {login === null ? <LoginForm /> : <BlogsList />}
             </Route>
