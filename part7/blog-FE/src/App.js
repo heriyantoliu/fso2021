@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogsList from './components/BlogsList'
 import UsersList from './components/UsersList'
+import User from './components/User'
 
 import { getBlogs } from './reducers/blogReducer'
 import { setUser, userLogout } from './reducers/loginReducer'
@@ -28,6 +29,12 @@ const App = () => {
     dispatch(userLogout())
   }
 
+  const match = useRouteMatch('/users/:id')
+  let userID
+  if (match) {
+    userID = match.params.id
+  }
+
   return (
     <div>
       <h1>Blogs</h1>
@@ -42,10 +49,13 @@ const App = () => {
             <button onClick={handleLogout}>logout</button>
           </p>
           <Switch>
-            <Route path="/users/:id"></Route>
+            <Route path="/users/:id">
+              <User id={userID} />
+            </Route>
             <Route path="/users">
               <UsersList />
             </Route>
+
             <Route path="/">
               {login === null ? <LoginForm /> : <BlogsList />}
             </Route>

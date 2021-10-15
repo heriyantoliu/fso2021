@@ -14,7 +14,12 @@ Content-Type: application/json
 
 ###
 //Get all users
+# @name user
 GET {{userUrl}}
+
+###
+//Get Specific user
+GET {{userUrl}}/{{user.response.body.$[0].id}}
 
 
 ###
