@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import userService from '../services/users'
+import { ListGroup } from 'react-bootstrap'
 
 const User = ({ id }) => {
   const [user, setUser] = useState(null)
@@ -17,13 +18,13 @@ const User = ({ id }) => {
     <div>
       <h2>{user.name}</h2>
       <h4>added blogs</h4>
-      <ul>
+      <ListGroup>
         {user.blogs.map((blog) => (
-          <li key={blog.id}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-          </li>
+          <ListGroup.Item key={blog.id} href={`/blogs/${blog.id}`} action>
+            {blog.title}
+          </ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { userLogin } from '../reducers/loginReducer'
+import { Form, Button, Col } from 'react-bootstrap'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -14,31 +15,31 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={handleLogin}>
-      <div>
-        username{' '}
-        <input
-          id="username"
-          type="text"
-          value={username}
-          name="username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password{' '}
-        <input
-          id="password"
-          type="password"
-          value={password}
-          name="password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button id="login-button" type="submit">
-        login
-      </button>
-    </form>
+    <Form onSubmit={handleLogin}>
+      <Col sm={3}>
+        <Form.Group className="mb-3" controlId="loginUsernameForm">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter username"
+            onChange={() => setUsername(event.target.value)}
+          />
+        </Form.Group>
+      </Col>
+      <Col sm={3}>
+        <Form.Group className="mb-3" controlId="loginPasswordForm">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Enter password"
+            onChange={() => setPassword(event.target.value)}
+          />
+        </Form.Group>
+      </Col>
+      <Button variant="primary" type="submit">
+        Submit
+      </Button>
+    </Form>
   )
 }
 

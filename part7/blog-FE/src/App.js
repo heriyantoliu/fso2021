@@ -39,7 +39,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <h1>Blogs</h1>
       <Notification />
       <Menu />

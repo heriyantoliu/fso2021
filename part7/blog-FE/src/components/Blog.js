@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import blogService from '../services/blogs'
-// import { useDispatch } from 'react-redux'
-// import { likesBlog, removeBlog } from '../reducers/blogReducer'
+import { Card, Button, Form, Col, ListGroup, Row } from 'react-bootstrap'
 
 const Blog = ({ id }) => {
   const [blog, setBlog] = useState(null)
@@ -45,28 +44,44 @@ const Blog = ({ id }) => {
   }
 
   return (
-    <div>
-      <h2>{blog.title}</h2>
-      <a href={blog.url}>{blog.url}</a>
-      <div>
-        likes {blog.likes}
-        <button onClick={handleAddLikes}>like</button>
-      </div>
-      added by {blog.user.name}
-      <h3>comments</h3>
-      <form onSubmit={handleAddComment}>
-        <input
-          value={comment}
-          onChange={() => setComment(event.target.value)}
-        />
-        <button type="submit">add comment</button>
-      </form>
-      <ul>
-        {blog.comments.map((comment) => (
-          <li key={comment}>{comment}</li>
-        ))}
-      </ul>
-    </div>
+    <Card className="mt-2">
+      <Card.Header as="h2">{blog.title}</Card.Header>
+      <Card.Body>
+        <Card.Link href={blog.url}>{blog.url}</Card.Link>
+        <Card.Text className="my-2">
+          likes {blog.likes}
+          <Button className="mx-2" size="sm" onClick={handleAddLikes}>
+            like
+          </Button>
+        </Card.Text>
+        <Card.Text>added by {blog.user.name}</Card.Text>
+
+        <Card.Text as="h4">Comments</Card.Text>
+
+        <Form onSubmit={handleAddComment}>
+          <Row>
+            <Col sm={6}>
+              <Form.Group className="mb-3" controlId="commentForm">
+                <Form.Control
+                  type="text"
+                  placeholder="Enter comment"
+                  onChange={() => setComment(event.target.value)}
+                />
+              </Form.Group>
+            </Col>
+            <Col sm={6}>
+              <Button type="submit">Add Comment</Button>
+            </Col>
+          </Row>
+        </Form>
+
+        <ListGroup className="mt-2">
+          {blog.comments.map((comment) => (
+            <ListGroup.Item key={comment}>{comment}</ListGroup.Item>
+          ))}
+        </ListGroup>
+      </Card.Body>
+    </Card>
   )
 }
 
