@@ -9,7 +9,6 @@ const LoginForm = () => {
   const dispatch = useDispatch()
 
   const handleLogin = async (event) => {
-    console.log('LOGIN')
     event.preventDefault()
     dispatch(userLogin({ username, password }))
   }

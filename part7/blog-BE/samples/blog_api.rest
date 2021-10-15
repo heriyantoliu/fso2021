@@ -11,7 +11,7 @@ Content-Type: application/json
 
 {
   "username":"mluukkai",
-  "password":"password123"
+  "password":"salainen"
 }
 
 ###
@@ -67,7 +67,11 @@ Content-Type: application/json
 {
   "title": "test 2",
   "author": "author",
-  "url": "https://abc.com"
+  "url": "https://abc.com",
+  "comments": [
+    "test",
+    "test2"
+  ]
 }
 
 ###

@@ -29,13 +29,6 @@ const Blog = ({ id }) => {
     setBlog({ ...blog, likes: blog.likes + 1 })
   }
 
-  // const handleRemove = (blog) => {
-  //   const result = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
-  //   if (result) {
-  //     dispatch(removeBlog(blog.id))
-  //   }
-  // }
-
   return (
     <div>
       <h2>{blog.title}</h2>
@@ -45,29 +38,14 @@ const Blog = ({ id }) => {
         <button onClick={handleAddLikes}>like</button>
       </div>
       added by {blog.user.name}
+      <h3>comments</h3>
+      <ul>
+        {blog.comments.map((comment) => (
+          <li key={comment}>{comment}</li>
+        ))}
+      </ul>
     </div>
   )
-
-  // return (
-  //   <div id="list-blogs" style={blogStyle}>
-  //     <span id="span-blog">
-  //       {blog.title} {blog.author}
-  //     </span>
-  //     <Togglable buttonLabel="view">
-  //       <div>{blog.url}</div>
-  //       <div id="likes-div">
-  //         likes {blog.likes}{' '}
-  //         <button id="likes" className="btnLike" onClick={handleAddLikes}>
-  //           likes
-  //         </button>
-  //       </div>
-  //       <div>{blog.author}</div>
-  //       <button id="remove-blog-button" onClick={() => handleRemove(blog)}>
-  //         remove
-  //       </button>
-  //     </Togglable>
-  //   </div>
-  // )
 }
 
 export default Blog

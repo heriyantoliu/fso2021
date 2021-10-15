@@ -13,11 +13,9 @@ const Menu = () => {
   }
 
   const handleLogout = () => {
-    console.log('LOGOUT')
     dispatch(userLogout())
   }
 
-  console.log('LOGIN', login)
   return (
     <div>
       <Link style={padding} to="/">
