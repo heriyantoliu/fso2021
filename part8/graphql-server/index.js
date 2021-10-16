@@ -81,26 +81,40 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
-      let author = await Author.findOne({ name: args.author });
-      if (!author) {
-        const newAuthor = new Author({
-          name: args.author,
-        });
-        author = await newAuthor.save();
-      }
+      try {
+        let author = await Author.findOne({ name: args.author });
+        if (!author) {
+          const newAuthor = new Author({
+            name: args.author,
+          });
+          author = await newAuthor.save();
+        }
 
-      const book = new Book({ ...args, author: author.id });
-      await book.save();
+        const book = new Book({ ...args, author: author.id });
+        await book.save();
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidsArgs: args,
+        });
+      }
 
       return book;
     },
     editAuthor: async (root, args) => {
-      const updatedAuthor = await Author.findOne({ name: args.name });
-      if (!updatedAuthor) {
-        return null;
+      try {
+        const updatedAuthor = await Author.findOne({ name: args.name });
+        if (!updatedAuthor) {
+          return null;
+        }
+        updatedAuthor.born = args.setBornTo;
+        await updatedAuthor.save();
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidsArgs: args,
+        });
       }
-      updatedAuthor.born = args.setBornTo;
-      return await updatedAuthor.save();
+
+      return updatedAuthor;
     },
   },
 };
