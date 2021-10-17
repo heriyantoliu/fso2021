@@ -5,7 +5,7 @@ import Books from './components/Books';
 import LoginForm from './components/LoginForm';
 import NewBook from './components/NewBook';
 import Recommended from './components/Recommended';
-import { BOOK_ADDED } from './queries';
+import { ALL_BOOKS, BOOK_ADDED } from './queries';
 
 const Notify = ({ errorMessage }) => {
   if (!errorMessage) {
@@ -21,11 +21,24 @@ const App = () => {
 
   const client = useApolloClient();
 
+  const updateCacheWith = (addedBook) => {
+    const includedIn = (set, object) => {
+      set.map((p) => p.id).includes(object.id);
+    };
+
+    const dataInStore = client.readQuery({ query: ALL_BOOKS });
+    if (!includedIn(dataInStore.allBooks, addedBook)) {
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: { allBooks: dataInStore.allBooks.concat(addedBook) },
+      });
+    }
+  };
+
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
-      console.log(subscriptionData);
       const addedBook = subscriptionData.data.bookAdded;
-      alert(`added ${addedBook.title}`);
+      updateCacheWith(addedBook);
     },
   });
 
@@ -75,7 +88,11 @@ const App = () => {
         />
       ) : (
         <div>
-          <NewBook show={page === 'add'} setError={notify} />
+          <NewBook
+            show={page === 'add'}
+            setError={notify}
+            updateCacheWith={updateCacheWith}
+          />
           <Recommended show={page === 'recommended'} />
         </div>
       )}
