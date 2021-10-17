@@ -90,11 +90,7 @@ const resolvers = {
     },
     me: (root, args, context) => context.currentUser,
   },
-  Author: {
-    bookCount: async (root) => {
-      return await Book.find({ author: root.id }).countDocuments();
-    },
-  },
+
   Mutation: {
     addBook: async (root, args, { currentUser }) => {
       if (!currentUser) {
@@ -108,8 +104,12 @@ const resolvers = {
         if (!author) {
           const newAuthor = new Author({
             name: args.author,
+            bookCount: 1,
           });
           author = await newAuthor.save();
+        } else {
+          author.bookCount = author.bookCount + 1;
+          await Author.findByIdAndUpdate(author._id, author);
         }
 
         book = new Book({ ...args, author: author.id });
