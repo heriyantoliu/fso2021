@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const Author = require('./models/author');
 const Book = require('./models/book');
 const User = require('./models/user');
+const book = require('./models/book');
 
 require('dotenv-flow').config();
 
@@ -88,6 +89,8 @@ const resolvers = {
         throw new AuthenticationError('not authenticated');
       }
 
+      let book = null;
+
       try {
         let author = await Author.findOne({ name: args.author });
         if (!author) {
@@ -97,8 +100,9 @@ const resolvers = {
           author = await newAuthor.save();
         }
 
-        const book = new Book({ ...args, author: author.id });
+        book = new Book({ ...args, author: author.id });
         await book.save();
+        await book.populate('author');
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidsArgs: args,
@@ -112,8 +116,10 @@ const resolvers = {
         throw new AuthenticationError('not authenticated');
       }
 
+      let updatedAuthor = null;
+
       try {
-        const updatedAuthor = await Author.findOne({ name: args.name });
+        updatedAuthor = await Author.findOne({ name: args.name });
         if (!updatedAuthor) {
           return null;
         }

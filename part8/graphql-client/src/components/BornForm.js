@@ -3,12 +3,15 @@ import Select from 'react-select';
 import { useMutation, useQuery } from '@apollo/client';
 import { ALL_AUTHORS, UPDATE_AUTHOR } from '../queries';
 
-const BornForm = () => {
+const BornForm = ({ setError }) => {
   const [name, setName] = useState('');
   const [born, setBorn] = useState(0);
 
   const [updateAuthor] = useMutation(UPDATE_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
+    onError: (error) => {
+      setError(error.graphQLErrors[0].message);
+    },
   });
 
   const result = useQuery(ALL_AUTHORS);
@@ -26,9 +29,6 @@ const BornForm = () => {
         setBornTo: Number(born),
       },
     });
-
-    setName('');
-    setBorn(0);
   };
 
   return (
