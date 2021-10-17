@@ -19,19 +19,19 @@ mongoose
   });
 
 const typeDefs = gql`
-  type Book {
-    title: String!
-    published: Int!
-    author: String!
-    id: ID!
-    genres: [String]
-  }
-
   type Author {
     name: String!
     born: Int
     id: ID!
     bookCount: Int
+  }
+
+  type Book {
+    title: String!
+    published: Int!
+    author: Author
+    id: ID!
+    genres: [String]
   }
 
   type User {
@@ -70,7 +70,7 @@ const resolvers = {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      return await Book.find({});
+      return await Book.find({}).populate('author');
     },
     allAuthors: async () => {
       return await Author.find({});
