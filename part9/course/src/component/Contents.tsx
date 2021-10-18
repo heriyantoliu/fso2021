@@ -1,14 +1,19 @@
-import React from 'react'
+import React from 'react';
+import Part from './Part';
+import { CoursePart } from '../App';
 
 interface ContentsProps {
-  name: string,
-  exerciseCount: number
+  courseParts: CoursePart[];
 }
 
-const Contents = ({courseParts}:{courseParts: Array<ContentsProps>}) => {
- return <div>
-   {courseParts.map(course=><p key={course.name}>{course.name} {course.exerciseCount}</p>)}
- </div>
-}
+const Contents = ({ courseParts }: ContentsProps) => {
+  return (
+    <div>
+      {courseParts.map((course) => (
+        <Part key={course.name} part={course} />
+      ))}
+    </div>
+  );
+};
 
-export default Contents
+export default Contents;
