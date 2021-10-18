@@ -16,3 +16,5 @@ export interface PatientEntry {
 }
 
 export type NonSSNPatientEntry = Omit<PatientEntry, 'ssn'>;
+
+export type NewPatientEntry = Omit<PatientEntry, 'id'>;
