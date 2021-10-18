@@ -17,7 +17,7 @@
 //   }
 // };
 
-const calculateBmi = (height: number, weight: number): String => {
+const calculateBmi = (height: number, weight: number): string => {
   const bmi = weight / (height / 100) ** 2;
   if (bmi < 16) {
     return 'Underweight (Severe thinness';

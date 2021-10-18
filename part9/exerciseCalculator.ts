@@ -37,7 +37,7 @@ const calculateExercise = (hours: Array<number>): result => {
 const parseArgumentsExercise = (args: Array<string>): exercisesValues => {
   if (args.length < 3) throw new Error('Not enought arguments');
 
-  let hours: Array<number> = [];
+  const hours: Array<number> = [];
 
   for (let i = 2; i < args.length; i++) {
     if (!isNaN(Number(args[i]))) {
