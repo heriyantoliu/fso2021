@@ -20,18 +20,24 @@ const PatientDetail = () => {
   React.useEffect(() => {
     const findPatient: Patient = patients[id];
 
+    console.log('ID', id);
+
     const fetchPatientDetail = async () => {
       try {
         const { data: patientDetailFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
 
+        console.log(patientDetailFromApi);
         setPatient(patientDetailFromApi);
+
         dispatch(addPatient(patientDetailFromApi));
       } catch (e) {
         console.error(e);
       }
     };
+
+    console.log(findPatient);
 
     if (findPatient) {
       setPatient(findPatient);
@@ -63,6 +69,17 @@ const PatientDetail = () => {
       </h3>
       <div>ssn: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
+      <h4>entries</h4>
+      {patient.entries.map((entry) => (
+        <div key={entry.id}>
+          {entry.date} {entry.description}
+          <ul>
+            {entry.diagnosisCodes?.map((diagnose) => (
+              <li key={diagnose}>{diagnose}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 };
