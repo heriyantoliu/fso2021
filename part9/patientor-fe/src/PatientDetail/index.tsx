@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Patient } from '../types';
 import { apiBaseUrl } from '../constants';
 import { Icon } from 'semantic-ui-react';
-import { useStateValue } from '../state';
+import { useStateValue, addPatient } from '../state';
 
 type PatientDetailParams = {
   id: string;
@@ -27,7 +27,7 @@ const PatientDetail = () => {
         );
 
         setPatient(patientDetailFromApi);
-        dispatch({ type: 'ADD_PATIENT', payload: patientDetailFromApi });
+        dispatch(addPatient(patientDetailFromApi));
       } catch (e) {
         console.error(e);
       }
