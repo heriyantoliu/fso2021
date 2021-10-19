@@ -6,6 +6,7 @@ import { Diagnosis, Patient } from '../types';
 import { apiBaseUrl } from '../constants';
 import { Icon } from 'semantic-ui-react';
 import { useStateValue, addPatient, setDiagnosisList } from '../state';
+import EntryPatient from './EntryPatient';
 
 type PatientDetailParams = {
   id: string;
@@ -54,7 +55,7 @@ const PatientDetail = () => {
       }
     };
 
-    if (diagnoses === {}) {
+    if (Object.keys(diagnoses).length === 0) {
       void fetchDiagnoses();
     }
   }, []);
@@ -84,16 +85,7 @@ const PatientDetail = () => {
       <div>occupation: {patient.occupation}</div>
       <h4>entries</h4>
       {patient.entries.map((entry) => (
-        <div key={entry.id}>
-          {entry.date} {entry.description}
-          <ul>
-            {entry.diagnosisCodes?.map((diagnose) => (
-              <li key={diagnose}>
-                {diagnose} {diagnoses[diagnose].name}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <EntryPatient key={entry.id} entry={entry} />
       ))}
     </div>
   );
