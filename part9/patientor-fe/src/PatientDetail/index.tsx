@@ -2,10 +2,10 @@
 import React from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Patient } from '../types';
+import { Diagnosis, Patient } from '../types';
 import { apiBaseUrl } from '../constants';
 import { Icon } from 'semantic-ui-react';
-import { useStateValue, addPatient } from '../state';
+import { useStateValue, addPatient, setDiagnosisList } from '../state';
 
 type PatientDetailParams = {
   id: string;
@@ -14,13 +14,12 @@ type PatientDetailParams = {
 const PatientDetail = () => {
   const { id } = useParams<PatientDetailParams>();
   const [{ patients }, dispatch] = useStateValue();
+  const [{ diagnoses }, dispatchDiagnosis] = useStateValue();
 
   const [patient, setPatient] = React.useState<Patient | undefined>(undefined);
 
   React.useEffect(() => {
     const findPatient: Patient = patients[id];
-
-    console.log('ID', id);
 
     const fetchPatientDetail = async () => {
       try {
@@ -28,7 +27,6 @@ const PatientDetail = () => {
           `${apiBaseUrl}/patients/${id}`
         );
 
-        console.log(patientDetailFromApi);
         setPatient(patientDetailFromApi);
 
         dispatch(addPatient(patientDetailFromApi));
@@ -37,12 +35,27 @@ const PatientDetail = () => {
       }
     };
 
-    console.log(findPatient);
-
     if (findPatient) {
       setPatient(findPatient);
     } else {
       void fetchPatientDetail();
+    }
+  }, []);
+
+  React.useEffect(() => {
+    const fetchDiagnoses = async () => {
+      try {
+        const { data: diagnosesListFormApi } = await axios.get<Diagnosis[]>(
+          `${apiBaseUrl}/diagnoses`
+        );
+        dispatchDiagnosis(setDiagnosisList(diagnosesListFormApi));
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    if (diagnoses === {}) {
+      void fetchDiagnoses();
     }
   }, []);
 
@@ -75,7 +88,9 @@ const PatientDetail = () => {
           {entry.date} {entry.description}
           <ul>
             {entry.diagnosisCodes?.map((diagnose) => (
-              <li key={diagnose}>{diagnose}</li>
+              <li key={diagnose}>
+                {diagnose} {diagnoses[diagnose].name}
+              </li>
             ))}
           </ul>
         </div>
