@@ -6,10 +6,16 @@ export enum Gender {
 }
 
 export enum HealthCheckRating {
-  'Healthy' = 0,
-  'LowRisk' = 1,
-  'HighRisk' = 2,
-  'CriticalRisk' = 3,
+  Healthy = 0,
+  LowRisk = 1,
+  HighRisk = 2,
+  CriticalRisk = 3,
+}
+
+export enum EntryType {
+  Hospital = 'Hospital',
+  OccupationalHealthcare = 'OccupationalHealthcare',
+  HealthCheck = 'HealthCheck',
 }
 
 export interface DiagnoseEntry {
@@ -22,6 +28,7 @@ export type NonLatinDiagnoseEntry = Omit<DiagnoseEntry, 'latin'>;
 
 interface BaseEntry {
   id: string;
+  type: EntryType;
   description: string;
   date: string;
   specialist: string;
@@ -29,7 +36,7 @@ interface BaseEntry {
 }
 
 interface HospitalEntry extends BaseEntry {
-  type: 'Hospital';
+  type: EntryType.Hospital;
   discharge: {
     date: string;
     criteria: string;
@@ -37,7 +44,7 @@ interface HospitalEntry extends BaseEntry {
 }
 
 interface OccupationalHealthcareEntry extends BaseEntry {
-  type: 'OccupationalHealthcare';
+  type: EntryType.OccupationalHealthcare;
   description: string;
   employerName: string;
   sickLeave: {
@@ -47,7 +54,7 @@ interface OccupationalHealthcareEntry extends BaseEntry {
 }
 
 interface HealthCheckEntry extends BaseEntry {
-  type: 'HealthCheck';
+  type: EntryType.HealthCheck;
   healthCheckRating: HealthCheckRating;
 }
 
@@ -61,7 +68,7 @@ export interface PatientEntry {
   name: string;
   dateOfBirth: string;
   ssn: string;
-  gender: string;
+  gender: Gender;
   occupation: string;
   entries: Entry[];
 }
@@ -69,6 +76,13 @@ export interface PatientEntry {
 export type NonSSNPatientEntry = Omit<PatientEntry, 'ssn' | 'entries'>;
 
 export type NewPatientEntry = Omit<PatientEntry, 'id'>;
+
+export type NewEntryBase = Omit<BaseEntry, 'id'>;
+
+export type NewEntry =
+  | Omit<HospitalEntry, 'id'>
+  | Omit<OccupationalHealthcareEntry, 'id'>
+  | Omit<HealthCheckEntry, 'id'>;
 
 // type UnionOmit<T, K extends string | number | symbol> = T extends unknown
 //   ? Omit<T, K>

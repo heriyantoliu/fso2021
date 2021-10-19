@@ -3,7 +3,12 @@
 import patients from '../../data/patients';
 import { v1 as uuid } from 'uuid';
 
-import { NonSSNPatientEntry, PatientEntry, NewPatientEntry } from '../types';
+import {
+  NonSSNPatientEntry,
+  PatientEntry,
+  NewPatientEntry,
+  NewEntry,
+} from '../types';
 
 const getEntries = (): Array<PatientEntry> => {
   return patients;
@@ -21,7 +26,6 @@ const getNonSSNEntries = (): NonSSNPatientEntry[] => {
 
 const getPatientDetail = (id: string): PatientEntry | undefined => {
   const entry = patients.find((p) => p.id === id);
-  console.log('GET', entry);
   return entry;
 };
 
@@ -36,4 +40,29 @@ const AddPatient = (entry: NewPatientEntry): PatientEntry => {
   return newPatientEntry;
 };
 
-export default { getEntries, getNonSSNEntries, AddPatient, getPatientDetail };
+const AddEntry = (
+  patientID: string,
+  entry: NewEntry
+): PatientEntry | undefined => {
+  const entryID: string = uuid();
+  const patient = patients.find((p) => p.id === patientID);
+  if (!patient) {
+    return undefined;
+  }
+
+  patient.entries.push({ ...entry, id: entryID });
+  // const updatedPatient = {
+  //   ...patient,
+  //   entries: patient?.entries.concat({ ...entry, id: entryID }),
+  // };
+
+  return patient;
+};
+
+export default {
+  getEntries,
+  getNonSSNEntries,
+  AddPatient,
+  getPatientDetail,
+  AddEntry,
+};

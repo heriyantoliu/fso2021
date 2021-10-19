@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import express from 'express';
 import patientService from '../services/patientService';
-import toNewPatientEntry from '../utils';
+import toNewPatientEntry, { toNewEntry } from '../utils';
 
 const router = express.Router();
 
@@ -12,7 +12,17 @@ router.get('/', (_req, res) => {
 router.get('/:id', (req, res) => {
   const patient = patientService.getPatientDetail(req.params.id);
   if (patient) {
-    console.log(patient);
+    res.send(patient);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+router.post('/:id/entries', (req, res) => {
+  const newEntry = toNewEntry(req.body);
+  const patient = patientService.AddEntry(req.params.id, newEntry);
+
+  if (patient) {
     res.send(patient);
   } else {
     res.sendStatus(404);
