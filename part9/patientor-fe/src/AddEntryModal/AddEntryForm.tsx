@@ -133,6 +133,17 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               errors.DischargeCriteria = requiredError;
             }
             break;
+          case EntryType.OccupationalHealthcare:
+            if (!values.employerName) {
+              errors.employerName = requiredError;
+            }
+            if (!values.sickLeaveStartDate) {
+              errors.sickLeaveStartDate = requiredError;
+            }
+            if (!values.sickLeaveEndDate) {
+              errors.sickLeaveEndDate = requiredError;
+            }
+            break;
         }
 
         return errors;
