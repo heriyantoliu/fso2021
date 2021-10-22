@@ -40,23 +40,21 @@ const AddPatient = (entry: NewPatientEntry): PatientEntry => {
   return newPatientEntry;
 };
 
-const AddEntry = (
-  patientID: string,
-  entry: NewEntry
-): PatientEntry | undefined => {
+const AddEntry = (patient: PatientEntry, entry: NewEntry): PatientEntry => {
   const entryID: string = uuid();
-  const patient = patients.find((p) => p.id === patientID);
-  if (!patient) {
-    return undefined;
-  }
 
-  patient.entries.push({ ...entry, id: entryID });
-  // const updatedPatient = {
-  //   ...patient,
-  //   entries: patient?.entries.concat({ ...entry, id: entryID }),
-  // };
+  const updatedPatient = {
+    ...patient,
+    entries: patient.entries?.concat({ ...entry, id: entryID }),
+  };
 
-  return patient;
+  patients.forEach((p, index) => {
+    if (p.id === patient.id) {
+      patients[index] = updatedPatient;
+    }
+  });
+
+  return updatedPatient;
 };
 
 export default {

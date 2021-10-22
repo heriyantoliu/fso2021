@@ -7,7 +7,9 @@ import { SemanticCOLORS } from 'semantic-ui-react/dist/commonjs/generic';
 const EntryPatient = ({ entry }: { entry: Entry }) => {
   const [{ diagnoses }] = useStateValue();
 
-  const assetNever = (value: never): never => {
+  if (Object.values(diagnoses).length === 0) return <div>Loading...</div>;
+
+  const assetNever = (value: unknown): never => {
     throw new Error(
       `Unhandled discriminated union member: ${JSON.stringify(value)}`
     );

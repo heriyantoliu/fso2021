@@ -34,8 +34,7 @@ interface TextProps extends FieldProps {
   placeholder: string;
 }
 
-export const TextField = ({ field, label, placeholder, form }: TextProps) => {
-  console.log(form.errors);
+export const TextField = ({ field, label, placeholder }: TextProps) => {
   return (
     <Form.Field>
       <label>{label}</label>

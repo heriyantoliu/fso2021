@@ -18,6 +18,12 @@ export enum HealthCheckRating {
   'CriticalRisk' = 3,
 }
 
+export enum EntryType {
+  Hospital = 'Hospital',
+  OccupationalHealthcare = 'OccupationalHealthcare',
+  HealthCheck = 'HealthCheck',
+}
+
 export interface BaseEntry {
   id: string;
   description: string;
@@ -27,7 +33,7 @@ export interface BaseEntry {
 }
 
 interface HospitalEntry extends BaseEntry {
-  type: 'Hospital';
+  type: EntryType.Hospital;
   discharge: {
     date: string;
     criteria: string;
@@ -35,7 +41,7 @@ interface HospitalEntry extends BaseEntry {
 }
 
 interface OccupationalHealthcareEntry extends BaseEntry {
-  type: 'OccupationalHealthcare';
+  type: EntryType.OccupationalHealthcare;
   description: string;
   employerName: string;
   sickLeave: {
@@ -45,7 +51,7 @@ interface OccupationalHealthcareEntry extends BaseEntry {
 }
 
 interface HealthCheckEntry extends BaseEntry {
-  type: 'HealthCheck';
+  type: EntryType.HealthCheck;
   healthCheckRating: HealthCheckRating;
 }
 
@@ -63,3 +69,73 @@ export interface Patient {
   dateOfBirth?: string;
   entries: Entry[];
 }
+
+export type NewEntry =
+  | Omit<HospitalEntry, 'id'>
+  | Omit<OccupationalHealthcareEntry, 'id'>
+  | Omit<HealthCheckEntry, 'id'>;
+
+type EntryFields = {
+  description: string;
+  date: string;
+  specialist: string;
+  diagnosisCodes?: Array<string>;
+  type: EntryType;
+  dischargeDate: string;
+  dischargeCriteria: string;
+  employerName: string;
+  sickLeaveStartDate: string;
+  sickLeaveEndDate: string;
+  healthCheckRating: HealthCheckRating;
+};
+
+export const toNewEntry = ({
+  description,
+  date,
+  specialist,
+  diagnosisCodes,
+  type,
+  dischargeDate,
+  dischargeCriteria,
+  employerName,
+  sickLeaveStartDate,
+  sickLeaveEndDate,
+  healthCheckRating,
+}: EntryFields): NewEntry => {
+  type NewEntryBase = Omit<BaseEntry, 'id'>;
+
+  const newEntryBase: NewEntryBase = {
+    date,
+    description,
+    specialist,
+    diagnosisCodes,
+  };
+
+  switch (type) {
+    case EntryType.Hospital:
+      return {
+        ...newEntryBase,
+        type,
+        discharge: {
+          date: dischargeDate,
+          criteria: dischargeCriteria,
+        },
+      };
+    case EntryType.OccupationalHealthcare:
+      return {
+        ...newEntryBase,
+        type,
+        employerName,
+        sickLeave: {
+          startDate: sickLeaveStartDate,
+          endDate: sickLeaveEndDate,
+        },
+      };
+    case EntryType.HealthCheck:
+      return {
+        ...newEntryBase,
+        type,
+        healthCheckRating,
+      };
+  }
+};
