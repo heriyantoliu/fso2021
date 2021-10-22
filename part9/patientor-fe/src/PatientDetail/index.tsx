@@ -25,6 +25,7 @@ const PatientDetail = () => {
 
   const [patient, setPatient] = React.useState<Patient | undefined>(undefined);
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | undefined>();
 
   React.useEffect(() => {
     const findPatient: Patient = patients[id];
@@ -77,7 +78,6 @@ const PatientDetail = () => {
   };
 
   const submitNewEntry = async (values: NewEntry) => {
-    console.log(values);
     try {
       const { data: newEntry } = await axios.post<Patient>(
         `${apiBaseUrl}/patients/${id}/entries`,
@@ -88,7 +88,8 @@ const PatientDetail = () => {
       setPatient(newEntry);
       closeModal();
     } catch (e) {
-      console.error(e.response?.data || 'unknown Error');
+      console.log(e.response);
+      setError(e.response?.data || 'unknown error');
     }
   };
 
@@ -121,6 +122,7 @@ const PatientDetail = () => {
         modalOpen={modalOpen}
         onSubmit={submitNewEntry}
         onClose={closeModal}
+        error={error}
       />
       <Button onClick={() => openModal()}>Add New Entry</Button>
     </div>
