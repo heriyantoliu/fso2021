@@ -144,6 +144,10 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               errors.sickLeaveEndDate = requiredError;
             }
             break;
+          case EntryType.HealthCheck:
+            if (!values.healthCheckRating) {
+              errors.healthCheckRating = requiredError;
+            }
         }
 
         return errors;
