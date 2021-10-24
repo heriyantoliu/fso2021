@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.appBarBackgroundColor,
     paddingBottom: 10,
     opacity: 0.7,
+    flexDirection: 'row',
   },
 });
 
@@ -20,7 +21,8 @@ const AppBar = () => {
 
   return (
     <View style={styles.container}>
-      <AppBarTab text="Repositories" pressed={repoPressed} />
+      <AppBarTab text="Repositories" link="/" />
+      <AppBarTab text="Sign In" link="/signin" />
     </View>
   );
 };
