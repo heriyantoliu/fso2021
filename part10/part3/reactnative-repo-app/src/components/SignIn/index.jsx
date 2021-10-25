@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-
 import FormikTextInput from './FormikTextInput';
 import useSignIn from '../../hooks/useSignIn';
+import AuthStorage from '../../utils/AuthStorage';
 
 const styles = StyleSheet.create({
   input: {
@@ -56,6 +56,9 @@ const SignIn = () => {
   const onSubmit = async ({ username, password }) => {
     try {
       const data = await signIn({ username, password });
+      const authStorage = new AuthStorage('Auth');
+      authStorage.setAccesToken(data.authorize.accessToken);
+      console.log(await authStorage.getAccessToken());
     } catch (e) {
       console.log(e);
     }
