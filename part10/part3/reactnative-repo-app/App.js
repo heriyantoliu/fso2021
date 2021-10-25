@@ -9,7 +9,6 @@ import createApolloClient from './src/utils/apolloClient.js';
 const apolloClient = createApolloClient();
 
 const App = () => {
-  console.log(Constants.manifest);
   return (
     <>
       <NativeRouter>

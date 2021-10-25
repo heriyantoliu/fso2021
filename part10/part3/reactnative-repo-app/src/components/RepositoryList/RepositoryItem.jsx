@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, Image } from 'react-native';
-import theme from '../../theme';
+import theme from '../../../theme';
 
 const RepositoryItem = ({ repo }) => {
   const styles = StyleSheet.create({
