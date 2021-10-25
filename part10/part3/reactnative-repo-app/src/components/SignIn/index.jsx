@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import { useHistory } from 'react-router-native';
 import FormikTextInput from './FormikTextInput';
 import useSignIn from '../../hooks/useSignIn';
-import AuthStorage from '../../utils/AuthStorage';
+import useAuthStorage from '../../hooks/useAuthStorage';
 
 const styles = StyleSheet.create({
   input: {
@@ -53,12 +54,13 @@ const SignInForm = ({ onSubmit, dirty, isValid }) => {
 const SignIn = () => {
   const [signIn] = useSignIn();
 
+  const authStorage = useAuthStorage();
+  const history = useHistory();
+
   const onSubmit = async ({ username, password }) => {
     try {
-      const data = await signIn({ username, password });
-      const authStorage = new AuthStorage('Auth');
-      authStorage.setAccesToken(data.authorize.accessToken);
-      console.log(await authStorage.getAccessToken());
+      await signIn({ username, password });
+      history.push('/');
     } catch (e) {
       console.log(e);
     }
