@@ -6,7 +6,7 @@ const AppBarTab = ({ text, onPress }) => {
   const styles = StyleSheet.create({
     text: {
       color: theme.colors.appBarTextColor,
-      fontSize: 20,
+      fontSize: 15,
       marginLeft: 10,
       fontWeight: 'bold',
     },

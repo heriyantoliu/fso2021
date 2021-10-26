@@ -1,6 +1,6 @@
 import React from 'react';
 import FormikTextInput from './FormikTextInput';
-import { Text, Pressable } from 'react-native';
+import { Button } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
@@ -38,13 +38,12 @@ const SignInForm = ({ onSubmit }) => {
             placeholder="password"
             secureTextEntry={true}
           />
-          <Pressable
+          <Button
             testID="submit"
+            title="submit"
             onPress={handleSubmit}
             disabled={!dirty || !isValid}
-          >
-            <Text>Submit</Text>
-          </Pressable>
+          />
         </>
       )}
     </Formik>

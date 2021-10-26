@@ -35,6 +35,10 @@ const AppBar = () => {
     history.push('/signin');
   };
 
+  const toCreateReview = () => {
+    history.push('/create-review');
+  };
+
   const handleSignOut = async () => {
     console.log('signout');
     await authStorage.removeAccessToken();
@@ -46,11 +50,12 @@ const AppBar = () => {
     <View style={styles.container}>
       <ScrollView horizontal>
         <AppBarTab text="Repositories" onPress={toHome} />
-        {/* <AppBarTab text="Sign Out" onPress={handleSignOut} />
-        <AppBarTab text="Sign In" onPress={toSignIn} /> */}
 
         {authorizedUser ? (
-          <AppBarTab text="Sign Out" onPress={handleSignOut} />
+          <>
+            <AppBarTab text="Create Review" onPress={toCreateReview} />
+            <AppBarTab text="Sign Out" onPress={handleSignOut} />
+          </>
         ) : (
           <AppBarTab text="Sign In" onPress={toSignIn} />
         )}
