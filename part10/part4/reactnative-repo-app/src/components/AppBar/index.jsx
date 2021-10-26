@@ -35,12 +35,15 @@ const AppBar = () => {
     history.push('/signin');
   };
 
+  const toSignUp = () => {
+    history.push('/signup');
+  };
+
   const toCreateReview = () => {
     history.push('/create-review');
   };
 
   const handleSignOut = async () => {
-    console.log('signout');
     await authStorage.removeAccessToken();
     authorizedUser = undefined;
     apolloClient.resetStore();
@@ -57,7 +60,10 @@ const AppBar = () => {
             <AppBarTab text="Sign Out" onPress={handleSignOut} />
           </>
         ) : (
-          <AppBarTab text="Sign In" onPress={toSignIn} />
+          <>
+            <AppBarTab text="Sign In" onPress={toSignIn} />
+            <AppBarTab text="Sign Up" onPress={toSignUp} />
+          </>
         )}
       </ScrollView>
     </View>
