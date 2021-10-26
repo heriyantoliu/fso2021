@@ -39,6 +39,10 @@ const AppBar = () => {
     history.push('/signup');
   };
 
+  const toMyReviews = () => {
+    history.push('/my-reviews');
+  };
+
   const toCreateReview = () => {
     history.push('/create-review');
   };
@@ -57,6 +61,7 @@ const AppBar = () => {
         {authorizedUser ? (
           <>
             <AppBarTab text="Create Review" onPress={toCreateReview} />
+            <AppBarTab text="My Reviews" onPress={toMyReviews} />
             <AppBarTab text="Sign Out" onPress={handleSignOut} />
           </>
         ) : (
