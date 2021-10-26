@@ -7,7 +7,9 @@ const RepositoryList = () => {
   const [filter, setFilter] = useState('latestRepo');
   const [search, setSearch] = useState('');
   const [value] = useDebounce(search, 500);
-  const { repositories } = useRepositories(filter, value);
+  const { repositories, fetchMore } = useRepositories(filter, value, {
+    first: 8,
+  });
 
   const onFilter = (value) => {
     setFilter(value);
@@ -15,6 +17,10 @@ const RepositoryList = () => {
 
   const onSearch = (value) => {
     setSearch(value);
+  };
+
+  const onEndReach = () => {
+    fetchMore();
   };
 
   return (
@@ -25,6 +31,7 @@ const RepositoryList = () => {
         filter={filter}
         onSearch={onSearch}
         search={search}
+        onEndReach={onEndReach}
       />
     </>
   );

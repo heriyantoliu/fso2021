@@ -25,11 +25,9 @@ const styles = StyleSheet.create({
   date: {
     color: theme.colors.textSecondary,
   },
-  content: {
-    // flexShrink: 1,
-    // flexGrow: 1,
-  },
 });
+
+//
 
 const ReviewItem = ({ review }) => {
   return (
@@ -43,7 +41,7 @@ const ReviewItem = ({ review }) => {
           <Text style={styles.date}>
             {format(new Date(review.createdAt), 'dd.MM.yyyy')}
           </Text>
-          <Text style={styles.content}>{review.text}</Text>
+          <Text>{review.text}</Text>
         </View>
       </View>
     </View>
