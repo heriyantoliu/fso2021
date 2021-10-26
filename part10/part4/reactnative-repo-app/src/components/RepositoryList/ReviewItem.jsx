@@ -1,7 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button, Alert } from 'react-native';
 import { format } from 'date-fns';
+import { useHistory } from 'react-router-native';
+import { useMutation } from '@apollo/client';
 import theme from '../../../theme';
+import { DELETE_REVIEW } from '../../graphql/mutations';
 
 const styles = StyleSheet.create({
   container: {
@@ -9,7 +12,6 @@ const styles = StyleSheet.create({
   },
   flexRow: {
     flexDirection: 'row',
-    borderWidth: 1,
   },
   rating: {
     width: 40,
@@ -25,11 +27,43 @@ const styles = StyleSheet.create({
   date: {
     color: theme.colors.textSecondary,
   },
+  flexBottom: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
 });
 
 //
 
-const ReviewItem = ({ review }) => {
+const ReviewItem = ({ review, showButton, refetch }) => {
+  const history = useHistory();
+  const [deleteReview] = useMutation(DELETE_REVIEW);
+
+  const onView = (id) => {
+    history.push(`/repo/${id}`);
+  };
+  const onDelete = (id) => {
+    const delReview = async () => {
+      await deleteReview({
+        variables: { id },
+      });
+      refetch();
+    };
+
+    Alert.alert(
+      `Delete Review`,
+      'Are you sure you want to delete this review?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'Delete', onPress: () => delReview() },
+      ]
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.flexRow}>
@@ -44,6 +78,20 @@ const ReviewItem = ({ review }) => {
           <Text>{review.text}</Text>
         </View>
       </View>
+      {showButton ? (
+        <View style={styles.flexBottom}>
+          <Button
+            title="View Repository"
+            color="#0366d6"
+            onPress={() => onView(review.repositoryId)}
+          />
+          <Button
+            title="Delete Review"
+            color="#d73a4a"
+            onPress={() => onDelete(review.id)}
+          />
+        </View>
+      ) : null}
     </View>
   );
 };

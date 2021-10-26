@@ -33,7 +33,6 @@ export default class RepositoryListContainer extends React.Component {
           style={styles.picker}
           selectedValue={filter}
           onValueChange={(itemValue, itemIndex) => {
-            console.log(itemValue);
             onFilter(itemValue);
           }}
         >
