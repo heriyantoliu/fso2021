@@ -1,6 +1,10 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, Pressable, Button } from 'react-native';
+import { useHistory, useParams } from 'react-router-native';
+import { useQuery } from '@apollo/client';
+import * as Linking from 'expo-linking';
 import theme from '../../../theme';
+import { GET_REPOSITORY } from '../../graphql/queries';
 
 const RepositoryItem = ({ repo }) => {
   const styles = StyleSheet.create({
@@ -56,6 +60,9 @@ const RepositoryItem = ({ repo }) => {
     },
   });
 
+  const history = useHistory();
+  const { id } = useParams();
+
   function abbreviateNumber(value) {
     var newValue = value;
     if (value >= 1000) {
@@ -83,58 +90,87 @@ const RepositoryItem = ({ repo }) => {
     return newValue;
   }
 
+  if (id) {
+    const { data, loading } = useQuery(GET_REPOSITORY, {
+      fetchPolicy: 'cache-and-network',
+      variables: { id },
+    });
+
+    console.log(loading);
+    console.log(data);
+
+    repo = loading ? undefined : data.repository;
+  }
+
+  if (!repo) {
+    return null;
+  }
+
+  const onPressRepo = (id) => {
+    history.push(`/repo/${id}`);
+  };
+
+  const openGithub = (url) => {
+    Linking.openURL(url);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.flexUpperSide}>
-        <View style={styles.flexSubUpperSide}>
-          <View>
-            <Image
-              style={styles.avatar}
-              source={{ uri: repo.ownerAvatarUrl }}
-            />
+      <Pressable onPress={() => onPressRepo(repo.id)}>
+        <View style={styles.flexUpperSide}>
+          <View style={styles.flexSubUpperSide}>
+            <View>
+              <Image
+                style={styles.avatar}
+                source={{ uri: repo.ownerAvatarUrl }}
+              />
+            </View>
+            <View style={styles.headerInfo}>
+              <Text testID="name" style={styles.fullName}>
+                {repo.fullName}
+              </Text>
+              <Text testID="description" style={styles.description}>
+                {repo.description}
+              </Text>
+              <Text testID="language" style={styles.language}>
+                {repo.language}
+              </Text>
+            </View>
           </View>
-          <View style={styles.headerInfo}>
-            <Text testID="name" style={styles.fullName}>
-              {repo.fullName}
+        </View>
+        <View style={styles.flexBottomSide}>
+          <View style={styles.flexStats}>
+            <Text testID="stargazersCount" style={styles.statsInfo}>
+              {abbreviateNumber(repo.stargazersCount)}
             </Text>
-            <Text testID="description" style={styles.description}>
-              {repo.description}
+            <Text style={styles.statsLabel}>Stars</Text>
+          </View>
+
+          <View style={styles.flexStats}>
+            <Text testID="forksCount" style={styles.statsInfo}>
+              {abbreviateNumber(repo.forksCount)}
             </Text>
-            <Text testID="language" style={styles.language}>
-              {repo.language}
+            <Text style={styles.statsLabel}>Forks</Text>
+          </View>
+
+          <View style={styles.flexStats}>
+            <Text testID="reviewCount" style={styles.statsInfo}>
+              {abbreviateNumber(repo.reviewCount)}
             </Text>
+            <Text style={styles.statsLabel}>Reviews</Text>
+          </View>
+
+          <View style={styles.flexStats}>
+            <Text testID="ratingAverage" style={styles.statsInfo}>
+              {abbreviateNumber(repo.ratingAverage)}
+            </Text>
+            <Text style={styles.statsLabel}>Ratings</Text>
           </View>
         </View>
-      </View>
-      <View style={styles.flexBottomSide}>
-        <View style={styles.flexStats}>
-          <Text testID="stargazersCount" style={styles.statsInfo}>
-            {abbreviateNumber(repo.stargazersCount)}
-          </Text>
-          <Text style={styles.statsLabel}>Stars</Text>
-        </View>
-
-        <View style={styles.flexStats}>
-          <Text testID="forksCount" style={styles.statsInfo}>
-            {abbreviateNumber(repo.forksCount)}
-          </Text>
-          <Text style={styles.statsLabel}>Forks</Text>
-        </View>
-
-        <View style={styles.flexStats}>
-          <Text testID="reviewCount" style={styles.statsInfo}>
-            {abbreviateNumber(repo.reviewCount)}
-          </Text>
-          <Text style={styles.statsLabel}>Reviews</Text>
-        </View>
-
-        <View style={styles.flexStats}>
-          <Text testID="ratingAverage" style={styles.statsInfo}>
-            {abbreviateNumber(repo.ratingAverage)}
-          </Text>
-          <Text style={styles.statsLabel}>Ratings</Text>
-        </View>
-      </View>
+        {id ? (
+          <Button title="Open in Github" onPress={() => openGithub(repo.url)} />
+        ) : null}
+      </Pressable>
     </View>
   );
 };

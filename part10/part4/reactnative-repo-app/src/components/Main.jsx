@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Route, Switch, Redirect } from 'react-router-native';
 
 import RepositoryList from './RepositoryList';
+import RepositoryItem from './RepositoryList/RepositoryItem';
 import AppBar from './AppBar';
 import SignIn from './SignIn';
 import theme from '../../theme';
@@ -22,6 +23,9 @@ const Main = () => {
       <Switch>
         <Route path="/" exact>
           <RepositoryList />
+        </Route>
+        <Route path="/repo/:id">
+          <RepositoryItem />
         </Route>
         <Route path="/signin">
           <SignIn />
