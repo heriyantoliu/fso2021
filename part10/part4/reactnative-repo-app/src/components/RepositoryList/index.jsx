@@ -1,34 +1,31 @@
 import React, { useState } from 'react';
-import { Picker } from '@react-native-picker/picker';
-import { StyleSheet } from 'react-native';
+import { useDebounce } from 'use-debounce';
 import RepositoryListContainer from './RepositoryListContainer';
 import useRepositories from '../../hooks/useRepositories';
 
-const styles = StyleSheet.create({
-  picker: {
-    margin: 5,
-    fontSize: 16,
-  },
-});
-
 const RepositoryList = () => {
-  const [selected, setSelected] = useState('latestRepo');
-  const { repositories } = useRepositories(selected);
+  const [filter, setFilter] = useState('latestRepo');
+  const [search, setSearch] = useState('');
+  const [value] = useDebounce(search, 500);
+  const { repositories } = useRepositories(filter, value);
+
+  const onFilter = (value) => {
+    setFilter(value);
+  };
+
+  const onSearch = (value) => {
+    setSearch(value);
+  };
 
   return (
     <>
-      <Picker
-        style={styles.picker}
-        selectedValue={selected}
-        onValueChange={(itemValue, itemIndex) => {
-          setSelected(itemValue);
-        }}
-      >
-        <Picker.Item label="Latest Repositories" value="latestRepo" />
-        <Picker.Item label="Highest Rate Repositories" value="highRateRepo" />
-        <Picker.Item label="Lowest Rate Repositories" value="lowRateRepo" />
-      </Picker>
-      <RepositoryListContainer repositories={repositories} />
+      <RepositoryListContainer
+        repositories={repositories}
+        onFilter={onFilter}
+        filter={filter}
+        onSearch={onSearch}
+        search={search}
+      />
     </>
   );
 };
